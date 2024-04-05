@@ -70,3 +70,12 @@ merge() {
         git stash pop 0;
     fi;
 }
+
+ggc() {
+    branch_name=$(git rev-parse --abbrev-ref HEAD)
+    regex="^MOB(D*)-\d*"
+    substring=$(echo "$branch_name" | grep -E -o "$regex")
+
+    echo "Updating commit message"
+    git commit -m "$substring: $1"
+}
