@@ -73,9 +73,9 @@ merge() {
 
 ggc() {
     branch_name=$(git rev-parse --abbrev-ref HEAD)
-    regex="^MOB(D*)-\d*"
+    regex="^MOB(D*)-\d*" #or anything you need
     substring=$(echo "$branch_name" | grep -E -o "$regex")
 
     echo "Updating commit message"
-    git commit -m "$substring: $1"
+    git commit -m "$substring: $1" $2
 }
