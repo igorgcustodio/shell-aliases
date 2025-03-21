@@ -73,9 +73,18 @@ merge() {
 
 ggc() {
     branch_name=$(git rev-parse --abbrev-ref HEAD)
-    regex="^MOB(D*)-\d*" #or anything you need
-    substring=$(echo "$branch_name" | grep -E -o "$regex")
 
-    echo "Updating commit message"
-    git commit -m "$substring: $1" $2
+    # Regex for Jira keys
+    regex="([A-Z]+-\d+)"
+    jira_key=$(echo "$branch_name" | grep -Eo "$regex")
+
+    if [[ -z "$jira_key" ]]; then
+        echo "❌ Error: No JIRA key found in branch name. Commit aborted."
+        return 1
+    fi
+
+    commit_message="$jira_key: $1"
+    
+    echo "✅ Committing with message: \"$commit_message\""
+    git commit -m "$commit_message" "${@:2}"
 }
